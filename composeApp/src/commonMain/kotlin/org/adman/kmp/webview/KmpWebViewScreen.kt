@@ -45,10 +45,17 @@ import org.jetbrains.compose.ui.tooling.preview.Preview
  */
 @Composable
 @Preview
-fun KmpWebViewScreen(modifier: Modifier?,
-                     url: String?,
-                     htmlContent: String?,
-                     isLoading: (isLoading: Boolean) -> Unit,
-                     onUrlClicked: (url: String) -> Unit) {
-
+fun KmpWebViewScreen(
+    modifier: Modifier? = null,
+    url: String? = null,
+    htmlContent: String? = null,
+    isLoading: (isLoading: Boolean) -> Unit,
+    onUrlClicked: ((url: String) -> Unit)? = null
+) {
+    KmpWebView(
+        modifier = modifier,
+        url = url ?: "",
+        htmlContent = htmlContent ?: "",
+        isLoading = isLoading,
+        onUrlClicked = onUrlClicked ?: {})
 }
