@@ -50,7 +50,12 @@ fun KmpWebViewScreen(
     url: String? = null,
     htmlContent: String? = null,
     isLoading: (isLoading: Boolean) -> Unit,
-    onUrlClicked: (url: String) -> Unit
+    onUrlClicked: ((url: String) -> Unit)? = null
 ) {
-
+    KmpWebView(
+        modifier = modifier,
+        url = url ?: "",
+        htmlContent = htmlContent ?: "",
+        isLoading = isLoading,
+        onUrlClicked = onUrlClicked ?: {})
 }

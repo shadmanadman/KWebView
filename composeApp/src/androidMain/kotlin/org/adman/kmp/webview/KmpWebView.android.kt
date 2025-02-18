@@ -9,7 +9,7 @@ import android.webkit.WebSettings
 import android.webkit.WebView
 import android.webkit.WebViewClient
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.runtime.Composable
@@ -21,11 +21,21 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.viewinterop.AndroidView
 
 @Composable
-actual fun KmpWebView(modifier: Modifier,urlOrHtmlContent: UrlOrHtmlContent, isLoading: (isLoading: Boolean) -> Unit, onUrlClicked: (url: String) -> Unit){
+actual fun KmpWebView(
+    modifier: Modifier?,
+    url: Url?,
+    htmlContent: HtmlContent?,
+    isLoading: (isLoading: Boolean) -> Unit,
+    onUrlClicked: ((url: String) -> Unit)?
+) {
     var isLoadingFinished by remember { mutableStateOf(false) }
-    Box(modifier = Modifier.fillMaxWidth().verticalScroll(rememberScrollState())) {
+    Box(
+        modifier = modifier ?: Modifier
+            .fillMaxSize()
+            .verticalScroll(rememberScrollState())
+    ) {
         AndroidView(
-            modifier = Modifier.fillMaxWidth(),
+            modifier = modifier ?: Modifier.fillMaxSize(),
             factory = {
                 WebView(AppContext.get()).apply {
                     scrollBarStyle = View.SCROLLBARS_OUTSIDE_OVERLAY
@@ -70,7 +80,8 @@ actual fun KmpWebView(modifier: Modifier,urlOrHtmlContent: UrlOrHtmlContent, isL
                                 ) {
                                     true
                                 } else {
-                                    onUrlClicked(request.url.toString())
+                                    if (onUrlClicked != null)
+                                        onUrlClicked(request.url.toString())
                                     true
                                 }
                             }
@@ -80,12 +91,20 @@ actual fun KmpWebView(modifier: Modifier,urlOrHtmlContent: UrlOrHtmlContent, isL
                 }
             },
             update = { webView ->
-                webView.loadDataWithBaseURL("",
-                    /* data = */ htmlContent, /* mimeType = */
-                    "text/html", /* encoding = */
-                    "UTF-8",
-                    ""
-                )
+                if (url == null)
+                    htmlContent?.let {
+                        webView.loadDataWithBaseURL(
+                            "",
+                            /* data = */ it, /* mimeType = */
+                            "text/html", /* encoding = */
+                            "UTF-8",
+                            ""
+                        )
+                    }
+                else
+                    url.let {
+                        webView.loadUrl(it)
+                    }
             })
     }
 }
