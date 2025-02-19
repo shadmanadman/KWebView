@@ -49,13 +49,13 @@ fun KmpWebViewScreen(
     modifier: Modifier? = null,
     url: String? = null,
     htmlContent: String? = null,
-    isLoading: (isLoading: Boolean) -> Unit,
+    isLoading: ((isLoading: Boolean) -> Unit)? = null,
     onUrlClicked: ((url: String) -> Unit)? = null
 ) {
     KmpWebView(
         modifier = modifier,
         url = url ?: "",
         htmlContent = htmlContent ?: "",
-        isLoading = isLoading,
+        isLoading = isLoading?:{},
         onUrlClicked = onUrlClicked ?: {})
 }
