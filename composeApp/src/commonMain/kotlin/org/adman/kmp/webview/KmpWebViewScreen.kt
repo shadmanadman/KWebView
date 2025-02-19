@@ -54,8 +54,8 @@ fun KmpWebViewScreen(
 ) {
     KmpWebView(
         modifier = modifier,
-        url = url ?: "",
-        htmlContent = htmlContent ?: "",
+        url = url,
+        htmlContent = htmlContent,
         isLoading = isLoading?:{},
         onUrlClicked = onUrlClicked ?: {})
 }
