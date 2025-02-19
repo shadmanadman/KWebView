@@ -1,13 +1,19 @@
 package org.adman.kmp.webview
 
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.height
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.UIKitInteropProperties
 import androidx.compose.ui.viewinterop.UIKitView
+import kotlinx.cinterop.ExperimentalForeignApi
+import kotlinx.cinterop.readValue
+import platform.CoreGraphics.CGRectZero
 import platform.Foundation.NSURL
 import platform.Foundation.NSURLRequest
+import platform.UIKit.NSLayoutConstraint
 import platform.UIKit.UIView
 import platform.WebKit.WKNavigationAction
 import platform.WebKit.WKNavigationActionPolicy
@@ -17,6 +23,7 @@ import platform.WebKit.WKWebView
 import platform.WebKit.WKWebViewConfiguration
 import platform.darwin.NSObject
 
+@OptIn(ExperimentalForeignApi::class)
 @Composable
 actual fun KmpWebView(
     modifier: Modifier?,
@@ -25,31 +32,45 @@ actual fun KmpWebView(
     isLoading: (isLoading: Boolean) -> Unit,
     onUrlClicked: ((url: String) -> Unit)?
 ) {
-    val webView = remember { WKWebView() }
+    val config = WKWebViewConfiguration().apply {
+        allowsInlineMediaPlayback = true
+        allowsAirPlayForMediaPlayback = true
+        allowsPictureInPictureMediaPlayback = true
+    }
+
+    val webView = remember { WKWebView(CGRectZero.readValue(), config) }
 
     // Define the WKNavigationDelegate
     if (onUrlClicked != null) {
         val navigationDelegate = rememberWebViewDelegate(onUrlClicked)
         webView.navigationDelegate = navigationDelegate
     }
+
     UIKitView(
         factory = {
             val container = UIView()
-            webView.apply {
-                WKWebViewConfiguration().apply {
-                    allowsInlineMediaPlayback = true
-                    allowsAirPlayForMediaPlayback = true
-                    allowsPictureInPictureMediaPlayback = true
-                }
-                if (htmlContent != null)
-                    loadHTMLString(htmlContent, baseURL = null)
-                else
-                    loadRequest(NSURLRequest(NSURL(string = url ?: "")))
-            }
+
+            webView.translatesAutoresizingMaskIntoConstraints = false
             container.addSubview(webView)
+
+            NSLayoutConstraint.activateConstraints(
+                listOf(
+                    webView.topAnchor.constraintEqualToAnchor(container.topAnchor),
+                    webView.bottomAnchor.constraintEqualToAnchor(container.bottomAnchor),
+                    webView.leadingAnchor.constraintEqualToAnchor(container.leadingAnchor),
+                    webView.trailingAnchor.constraintEqualToAnchor(container.trailingAnchor)
+                )
+            )
+
+            when {
+                htmlContent != null -> webView.loadHTMLString(htmlContent, baseURL = null)
+                url != null -> webView.loadRequest(NSURLRequest(NSURL(string = url)))
+                else -> println("⚠️ No URL or HTML content provided")
+            }
+
             container
         },
-        modifier = modifier ?: Modifier.fillMaxSize(),
+        modifier = modifier ?: Modifier.fillMaxSize().height(500.dp),
         properties = UIKitInteropProperties(
             isInteractive = true,
             isNativeAccessibilityEnabled = true
