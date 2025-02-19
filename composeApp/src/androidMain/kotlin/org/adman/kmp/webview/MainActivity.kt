@@ -11,7 +11,7 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
 
         setContent {
-            KmpWebViewScreen(url = "www.google.com", isLoading = {}, onUrlClicked = {})
+            KmpWebViewScreen(url = "https://www.google.com/")
         }
     }
 }
