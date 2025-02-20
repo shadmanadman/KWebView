@@ -1,21 +1,25 @@
+import com.vanniktech.maven.publish.SonatypeHost
 import org.jetbrains.compose.desktop.application.dsl.TargetFormat
 import org.jetbrains.kotlin.gradle.ExperimentalKotlinGradlePluginApi
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 
 plugins {
     alias(libs.plugins.kotlinMultiplatform)
-    alias(libs.plugins.androidApplication)
     alias(libs.plugins.composeMultiplatform)
     alias(libs.plugins.composeCompiler)
+    alias(libs.plugins.androidLibrary)
+    id("com.vanniktech.maven.publish") version "0.28.0"
 }
+
 
 kotlin {
     androidTarget {
         compilerOptions {
             jvmTarget.set(JvmTarget.JVM_11)
         }
+        publishLibraryVariants("release", "debug")
     }
-    
+
     listOf(
         iosX64(),
         iosArm64(),
@@ -24,12 +28,12 @@ kotlin {
         iosTarget.binaries.framework {
             baseName = "ComposeApp"
             isStatic = true
-            binaryOption("bundleId","org.adman.kmp.webview")
+            binaryOption("bundleId", "org.adman.kmp.webview")
         }
     }
-    
+
     sourceSets {
-        
+
         androidMain.dependencies {
             implementation(compose.preview)
             implementation(libs.androidx.activity.compose)
@@ -48,15 +52,12 @@ kotlin {
 }
 
 android {
-    namespace = "org.adman.kmp.webview"
+    namespace = "io.github.shadmanadman"
     compileSdk = libs.versions.android.compileSdk.get().toInt()
 
     defaultConfig {
-        applicationId = "org.adman.kmp.webview"
         minSdk = libs.versions.android.minSdk.get().toInt()
-        targetSdk = libs.versions.android.targetSdk.get().toInt()
-        versionCode = 1
-        versionName = "1.0"
+        lint.targetSdk = libs.versions.android.targetSdk.get().toInt()
     }
     packaging {
         resources {
@@ -74,7 +75,51 @@ android {
     }
 }
 
+tasks.withType<Sign>().configureEach {
+    onlyIf { gradle.taskGraph.hasTask("publishReleasePublicationToMavenRepository") }
+}
+
 dependencies {
     debugImplementation(compose.uiTooling)
+}
+
+mavenPublishing {
+    coordinates(
+        groupId = libs.versions.groupId.get(),
+        artifactId = libs.versions.artifactId.get(),
+        version = libs.versions.libVersion.get()
+    )
+
+    pom {
+        name = "KMP WebView"
+        description = "A simple kmp webview to show HTML content or URL"
+        url = "https://github.com/shadmanadman/Kmp-WebView"
+        licenses {
+            license {
+                name = "Apache License, Version 2.0"
+                url = "https://www.apache.org/licenses/LICENSE-2.0.txt"
+            }
+        }
+        developers {
+            developer {
+                id = "shadmanadman"
+                name = "Shadman Adman"
+                email = "adman.shadman@gmail.com"
+            }
+        }
+        scm {
+            connection = "scm:git:https://github.com/shadmanadman/Kmp-WebView"
+            developerConnection = "scm:git:git@github.com:shadmanadman/Kmp-WebView.git"
+            url = "https://github.com/shadmanadman/Kmp-WebView"
+        }
+    }
+
+
+    // Configure publishing to Maven Central
+    publishToMavenCentral(SonatypeHost.CENTRAL_PORTAL)
+
+    // Enable GPG signing for all publications
+    signAllPublications()
+
 }
 
