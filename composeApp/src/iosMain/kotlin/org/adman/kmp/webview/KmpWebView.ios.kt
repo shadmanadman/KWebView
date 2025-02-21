@@ -25,7 +25,7 @@ import platform.darwin.NSObject
 
 @OptIn(ExperimentalForeignApi::class)
 @Composable
-actual fun KmpWebView(
+internal actual fun KmpWebView(
     modifier: Modifier?,
     url: Url?,
     htmlContent: HtmlContent?,
@@ -70,7 +70,7 @@ actual fun KmpWebView(
 
             container
         },
-        modifier = modifier ?: Modifier.fillMaxSize().height(500.dp),
+        modifier = modifier ?: Modifier.fillMaxSize(),
         properties = UIKitInteropProperties(
             isInteractive = true,
             isNativeAccessibilityEnabled = true

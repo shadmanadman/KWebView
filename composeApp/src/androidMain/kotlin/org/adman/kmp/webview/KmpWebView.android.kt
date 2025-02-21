@@ -21,7 +21,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.viewinterop.AndroidView
 
 @Composable
-actual fun KmpWebView(
+internal actual fun KmpWebView(
     modifier: Modifier?,
     url: Url?,
     htmlContent: HtmlContent?,
