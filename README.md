@@ -1,14 +1,25 @@
-This is a Kotlin Multiplatform project targeting Android, iOS.
-
-* `/composeApp` is for code that will be shared across your Compose Multiplatform applications.
-  It contains several subfolders:
-  - `commonMain` is for code that’s common for all targets.
-  - Other folders are for Kotlin code that will be compiled for only the platform indicated in the folder name.
-    For example, if you want to use Apple’s CoreCrypto for the iOS part of your Kotlin app,
-    `iosMain` would be the right folder for such calls.
-
-* `/iosApp` contains iOS applications. Even if you’re sharing your UI with Compose Multiplatform, 
-  you need this entry point for your iOS app. This is also where you should add SwiftUI code for your project.
+[![License](https://img.shields.io/badge/License-Apache_2.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
 
 
-Learn more about [Kotlin Multiplatform](https://www.jetbrains.com/help/kotlin-multiplatform-dev/get-started.html)…
+![](poster.jpg)
+
+<!-- GETTING STARTED -->
+## Getting Started
+### Adding dependencies
+- Add it in your `commonMain.dependencies`
+```
+@Composable
+fun KmpWebViewScreen(
+    modifier: Modifier? = null,
+    url: String? = null,
+    htmlContent: String? = null,
+    isLoading: ((isLoading: Boolean) -> Unit)? = null,
+    onUrlClicked: ((url: String) -> Unit)? = null
+)
+```
+- `isLoading`: Current loading status of the web view
+- `onUrlClicked`: If user click's on a link inside your web view you can handel it here. 
+  Note: Images(jpg,pngs) and attachment.id are excluded and will be opened inside your current web view.
+  Note: If you don't implement this, all links will be opened in your current web view.
+
+#### Any contribution is very satisfying. Make it easier for everyone
