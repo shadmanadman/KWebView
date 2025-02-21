@@ -22,7 +22,5 @@ fun KmpWebViewScreen(
    - *Note*: Images(jpg,pngs) and attachment.id are excluded and will be opened inside your current web view.
    - *Note*: If you don't implement this, all links will be opened in your current web view.
 
-<br />
 <h1 align="center">Any contribution is very satisfying. </h1>
-<h1 align="center">Make it easier for everyone</h1>
-<br />
+<h2 align="center">Make it easier for everyone</h2>
