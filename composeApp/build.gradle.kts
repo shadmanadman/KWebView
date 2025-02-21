@@ -1,23 +1,23 @@
 import com.vanniktech.maven.publish.SonatypeHost
-import org.jetbrains.compose.desktop.application.dsl.TargetFormat
-import org.jetbrains.kotlin.gradle.ExperimentalKotlinGradlePluginApi
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
+import java.io.FileInputStream
+import java.util.Properties
 
 plugins {
     alias(libs.plugins.kotlinMultiplatform)
     alias(libs.plugins.composeMultiplatform)
     alias(libs.plugins.composeCompiler)
     alias(libs.plugins.androidLibrary)
-    id("com.vanniktech.maven.publish") version "0.28.0"
+    id ("signing")
+    id("com.vanniktech.maven.publish") version "0.30.0"
 }
-
 
 kotlin {
     androidTarget {
         compilerOptions {
             jvmTarget.set(JvmTarget.JVM_11)
         }
-        publishLibraryVariants("release", "debug")
+        publishLibraryVariants("release")
     }
 
     listOf(
@@ -59,24 +59,16 @@ android {
         minSdk = libs.versions.android.minSdk.get().toInt()
         lint.targetSdk = libs.versions.android.targetSdk.get().toInt()
     }
+
     packaging {
         resources {
             excludes += "/META-INF/{AL2.0,LGPL2.1}"
-        }
-    }
-    buildTypes {
-        getByName("release") {
-            isMinifyEnabled = false
         }
     }
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_11
         targetCompatibility = JavaVersion.VERSION_11
     }
-}
-
-tasks.withType<Sign>().configureEach {
-    onlyIf { gradle.taskGraph.hasTask("publishReleasePublicationToMavenRepository") }
 }
 
 dependencies {
@@ -115,11 +107,21 @@ mavenPublishing {
     }
 
 
-    // Configure publishing to Maven Central
-    publishToMavenCentral(SonatypeHost.CENTRAL_PORTAL)
-
-    // Enable GPG signing for all publications
+    publishToMavenCentral(SonatypeHost.S01)
     signAllPublications()
-
 }
+
+
+val keystorePropertiesFile = rootProject.file("local.properties")
+val keystoreProperties = Properties()
+keystoreProperties.load(FileInputStream(keystorePropertiesFile))
+
+signing {
+    useInMemoryPgpKeys(
+        keystoreProperties["signing.keyId"].toString(),
+        File(keystoreProperties["signing.secretKeyFile"].toString()).readText(),
+        keystoreProperties["signing.password"].toString()
+    )
+}
+
 
