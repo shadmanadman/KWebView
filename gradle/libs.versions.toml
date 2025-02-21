@@ -16,7 +16,7 @@ junit = "4.13.2"
 kotlin = "2.1.10"
 groupId = "io.github.shadmanadman"
 artifactId = "kmp-webview"
-libVersion = "1.3.0"
+libVersion = "1.3.1"
 
 [libraries]
 kotlin-test = { module = "org.jetbrains.kotlin:kotlin-test", version.ref = "kotlin" }
