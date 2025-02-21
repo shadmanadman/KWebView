@@ -7,6 +7,11 @@
 ## Getting Started
 ### Adding dependencies
 - Add it in your `commonMain.dependencies`
+  ```
+  implementation("io.github.shadmanadman:kmp-webview:1.3.1")
+  ```
+
+### Usage  
 ```
 @Composable
 fun KmpWebViewScreen(
