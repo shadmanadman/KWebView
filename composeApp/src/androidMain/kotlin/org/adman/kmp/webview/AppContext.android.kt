@@ -3,7 +3,7 @@ package org.adman.kmp.webview
 import android.app.Application
 import android.content.Context
 
-actual object AppContext {
+internal actual object AppContext {
     private lateinit var application: Application
 
     fun setUp(context: Context) {

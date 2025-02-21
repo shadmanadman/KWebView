@@ -1,3 +1,3 @@
 package org.adman.kmp.webview
 
-expect object AppContext
+internal expect object AppContext
