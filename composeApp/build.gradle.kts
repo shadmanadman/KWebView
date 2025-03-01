@@ -10,6 +10,7 @@ plugins {
     alias(libs.plugins.androidLibrary)
     id ("signing")
     id("com.vanniktech.maven.publish") version "0.30.0"
+    id("com.google.osdetector") version "1.7.3"
 }
 
 kotlin {
@@ -32,7 +33,10 @@ kotlin {
         }
     }
 
+    jvm("desktop")
+
     sourceSets {
+        val desktopMain by getting
 
         androidMain.dependencies {
             implementation(compose.preview)
@@ -48,7 +52,28 @@ kotlin {
             implementation(libs.androidx.lifecycle.viewmodel)
             implementation(libs.androidx.lifecycle.runtime.compose)
         }
+
+        desktopMain.dependencies {
+            implementation(compose.desktop.common)
+            implementation(compose.desktop.currentOs)
+            val fxSuffix = when (osdetector.classifier) {
+                "linux-x86_64" -> "linux"
+                "linux-aarch_64" -> "linux-aarch64"
+                "windows-x86_64" -> "win"
+                "osx-x86_64" -> "mac"
+                "osx-aarch_64" -> "mac-aarch64"
+                else -> throw IllegalStateException("Unknown OS: ${osdetector.classifier}")
+            }
+            implementation("org.openjfx:javafx-base:19:${fxSuffix}")
+            implementation("org.openjfx:javafx-graphics:19:${fxSuffix}")
+            implementation("org.openjfx:javafx-controls:19:${fxSuffix}")
+            implementation("org.openjfx:javafx-swing:19:${fxSuffix}")
+            implementation("org.openjfx:javafx-web:19:${fxSuffix}")
+            implementation("org.openjfx:javafx-media:19:${fxSuffix}")
+            implementation(libs.kotlinx.coroutines.swing)
+        }
     }
+
 }
 
 android {
