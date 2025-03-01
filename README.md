@@ -1,14 +1,16 @@
 [![License](https://img.shields.io/badge/License-Apache_2.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
 
-
 ![](poster.jpg)
+
+### What's new in 1.8.3:
+- Support for desktop
 
 <!-- GETTING STARTED -->
 ## Getting Started
 ### Adding dependencies
 - Add it in your `commonMain.dependencies`
   ```
-  implementation("io.github.shadmanadman:kmp-webview:1.3.1")
+  implementation("io.github.shadmanadman:kmp-webview:1.8.3")
   ```
 
 ### Usage  
