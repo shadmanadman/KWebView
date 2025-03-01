@@ -1,4 +1,5 @@
 import com.vanniktech.maven.publish.SonatypeHost
+import org.jetbrains.compose.desktop.application.dsl.TargetFormat
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 import java.io.FileInputStream
 import java.util.Properties
@@ -75,6 +76,20 @@ kotlin {
     }
 
 }
+
+
+compose.desktop {
+    application {
+        mainClass = "org.adman.kmp.webview.MainKt"
+
+        nativeDistributions {
+            targetFormats(TargetFormat.Dmg, TargetFormat.Msi, TargetFormat.Deb)
+            packageName = "io.github.shadmanadman"
+            packageVersion = libs.versions.libVersion.get()
+        }
+    }
+}
+
 
 android {
     namespace = "io.github.shadmanadman"
