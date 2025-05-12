@@ -29,6 +29,7 @@ internal actual fun KmpWebView(
     modifier: Modifier?,
     url: Url?,
     htmlContent: HtmlContent?,
+    enableJavaScript: Boolean,
     isLoading: (isLoading: Boolean) -> Unit,
     onUrlClicked: ((url: String) -> Unit)?
 ) {
@@ -39,6 +40,9 @@ internal actual fun KmpWebView(
     }
 
     val webView = remember { WKWebView(CGRectZero.readValue(), config) }
+
+    // Enable java script content
+    webView.configuration.defaultWebpagePreferences.allowsContentJavaScript = enableJavaScript
 
     // Define the WKNavigationDelegate
     if (onUrlClicked != null) {

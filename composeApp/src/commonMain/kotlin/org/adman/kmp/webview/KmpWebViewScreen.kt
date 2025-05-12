@@ -49,6 +49,7 @@ fun KmpWebViewScreen(
     modifier: Modifier? = null,
     url: String? = null,
     htmlContent: String? = null,
+    enableJavaScript: Boolean = false,
     isLoading: ((isLoading: Boolean) -> Unit)? = null,
     onUrlClicked: ((url: String) -> Unit)? = null
 ) {
@@ -56,6 +57,7 @@ fun KmpWebViewScreen(
         modifier = modifier,
         url = url,
         htmlContent = htmlContent,
+        enableJavaScript = enableJavaScript,
         isLoading = isLoading?:{},
         onUrlClicked = onUrlClicked ?: {})
 }

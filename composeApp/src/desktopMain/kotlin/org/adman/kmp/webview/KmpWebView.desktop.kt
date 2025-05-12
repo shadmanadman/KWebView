@@ -22,6 +22,7 @@ internal actual fun KmpWebView(
     modifier: Modifier?,
     url: Url?,
     htmlContent: HtmlContent?,
+    enableJavaScript: Boolean,
     isLoading: (isLoading: Boolean) -> Unit,
     onUrlClicked: ((url: String) -> Unit)?
 ) {
@@ -29,7 +30,15 @@ internal actual fun KmpWebView(
     val jfxPanel = JFXPanel()
     SwingPanel(
         factory = {
-            jfxPanel.apply { buildWebView(url,htmlContent,isLoading, onUrlClicked) }
+            jfxPanel.apply {
+                buildWebView(
+                    url,
+                    htmlContent,
+                    enableJavaScript,
+                    isLoading,
+                    onUrlClicked
+                )
+            }
             jPanel.add(jfxPanel)
         },
         modifier = modifier ?: Modifier.fillMaxSize(),
@@ -41,18 +50,19 @@ internal actual fun KmpWebView(
 private fun JFXPanel.buildWebView(
     url: String?,
     htmlContent: HtmlContent?,
+    enableJavaScript: Boolean,
     isLoading: (isLoading: Boolean) -> Unit,
     onUrlClicked: ((url: String) -> Unit)?
-){
+) {
     initJavaFX()
     Platform.runLater {
         val webView = WebView()
         val webEngine = webView.engine
 
+        webEngine.isJavaScriptEnabled = enableJavaScript
         webEngine.userAgent =
             "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.3"
 
-        //webEngine.isJavaScriptEnabled = true
         scene = Scene(webView)
         htmlContent.let {
             webEngine.loadContent(it)
@@ -70,5 +80,6 @@ private fun JFXPanel.buildWebView(
                 onUrlClicked?.invoke(newLocation)
             }
         }
+
     }
 }
