@@ -25,6 +25,7 @@ internal actual fun KmpWebView(
     modifier: Modifier?,
     url: Url?,
     htmlContent: HtmlContent?,
+    enableJavaScript: Boolean,
     isLoading: (isLoading: Boolean) -> Unit,
     onUrlClicked: ((url: String) -> Unit)?
 ) {
@@ -47,11 +48,12 @@ internal actual fun KmpWebView(
                             ViewGroup.LayoutParams.WRAP_CONTENT
                         )
 
-                    // Enable horizontal scrolling
+                    // Enable horizontal scrolling and JavaScript
                     settings.apply {
                         loadWithOverviewMode = true
                         useWideViewPort = true
                         layoutAlgorithm = WebSettings.LayoutAlgorithm.NORMAL
+                        javaScriptEnabled = enableJavaScript
                     }
                     webViewClient =
                         object : WebViewClient() {
@@ -86,7 +88,6 @@ internal actual fun KmpWebView(
                                 }
                             }
                         }
-
 
                 }
             },

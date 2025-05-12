@@ -5,5 +5,13 @@ import androidx.compose.ui.Modifier
 
 typealias Url = String
 typealias HtmlContent = String
+
 @Composable
-internal expect fun KmpWebView(modifier: Modifier?, url: Url?,htmlContent: HtmlContent?, isLoading:(isLoading:Boolean)->Unit, onUrlClicked:((url:String)->Unit)?)
+internal expect fun KmpWebView(
+    modifier: Modifier?,
+    url: Url?,
+    htmlContent: HtmlContent?,
+    enableJavaScript: Boolean = false,
+    isLoading: (isLoading: Boolean) -> Unit,
+    onUrlClicked: ((url: String) -> Unit)?
+)
