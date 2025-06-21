@@ -1,4 +1,6 @@
-[![License](https://img.shields.io/badge/License-Apache_2.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
+<a href="http://www.wtfpl.net/"><img
+       src="http://www.wtfpl.net/wp-content/uploads/2012/12/wtfpl-badge-4.png"
+       width="80" height="15" alt="WTFPL" /></a>
 
 ![](poster.jpg)
 
@@ -35,10 +37,7 @@ fun KmpWebViewScreen(
 <h1 align="center">Any contribution is very satisfying. </h1>
 <h2 align="center">Make it easier for everyone</h2>
 
-### Licence 
-<a href="http://www.wtfpl.net/"><img
-       src="http://www.wtfpl.net/wp-content/uploads/2012/12/wtfpl-badge-4.png"
-       width="80" height="15" alt="WTFPL" /></a>
+### Licence       
 ```
                DO WHAT THE FUCK YOU WANT TO PUBLIC LICENSE 
                     Version 2, December 2004 
