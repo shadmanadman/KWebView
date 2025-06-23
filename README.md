@@ -44,7 +44,7 @@ fun KmpWebViewScreen(
 
  Copyright (C) 2025 Shadman Adman <adman.shadman@gmail.com> 
 
- Everyone is permitted to copy and distribute verbatim or modified 
+ Everyone is permitted to copy and distribute Kmp-WebView or modified 
  copies of this license document, and changing it is allowed as long 
  as the name is changed. 
 
