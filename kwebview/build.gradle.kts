@@ -10,7 +10,7 @@ plugins {
     alias(libs.plugins.composeCompiler)
     alias(libs.plugins.androidLibrary)
     id ("signing")
-    id("com.vanniktech.maven.publish") version "0.30.0"
+    id("com.vanniktech.maven.publish") version "0.33.0"
     id("com.google.osdetector") version "1.7.3"
 }
 
@@ -40,8 +40,6 @@ kotlin {
         val desktopMain by getting
 
         androidMain.dependencies {
-            implementation(compose.preview)
-            implementation(libs.androidx.activity.compose)
         }
         commonMain.dependencies {
             implementation(compose.runtime)
@@ -50,8 +48,6 @@ kotlin {
             implementation(compose.ui)
             implementation(compose.components.resources)
             implementation(compose.components.uiToolingPreview)
-            implementation(libs.androidx.lifecycle.viewmodel)
-            implementation(libs.androidx.lifecycle.runtime.compose)
         }
 
         desktopMain.dependencies {
@@ -157,11 +153,11 @@ val keystoreProperties = Properties()
 keystoreProperties.load(FileInputStream(keystorePropertiesFile))
 
 signing {
-    useInMemoryPgpKeys(
-        keystoreProperties["signing.keyId"].toString(),
-        File(keystoreProperties["signing.secretKeyFile"].toString()).readText(),
-        keystoreProperties["signing.password"].toString()
-    )
+//    useInMemoryPgpKeys(
+//        keystoreProperties["signing.keyId"].toString(),
+//        File(keystoreProperties["signing.secretKeyFile"].toString()).readText(),
+//        keystoreProperties["signing.password"].toString()
+//    )
 }
 
 

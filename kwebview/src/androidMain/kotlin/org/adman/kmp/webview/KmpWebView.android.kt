@@ -29,7 +29,6 @@ internal actual fun KmpWebView(
     isLoading: (isLoading: Boolean) -> Unit,
     onUrlClicked: ((url: String) -> Unit)?
 ) {
-    var isLoadingFinished by remember { mutableStateOf(false) }
     Box(
         modifier = modifier ?: Modifier
             .fillMaxSize()
@@ -68,7 +67,6 @@ internal actual fun KmpWebView(
 
                             override fun onPageFinished(view: WebView?, url: String?) {
                                 view?.scrollTo(view.contentHeight, 0)
-                                isLoadingFinished = true
                                 isLoading(false)
                             }
 

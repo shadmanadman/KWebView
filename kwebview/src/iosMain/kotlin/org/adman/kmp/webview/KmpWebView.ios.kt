@@ -46,7 +46,7 @@ internal actual fun KmpWebView(
 
     // Define the WKNavigationDelegate
     if (onUrlClicked != null) {
-        val navigationDelegate = rememberWebViewDelegate(onUrlClicked)
+        val navigationDelegate = rememberWebViewDelegate(onUrlClicked, onLoadingFinished = {isLoading(false)})
         webView.navigationDelegate = navigationDelegate
     }
 
@@ -83,13 +83,14 @@ internal actual fun KmpWebView(
 }
 
 @Composable
-private fun rememberWebViewDelegate(onUrlClicked: (String) -> Unit): WKNavigationDelegateProtocol {
+private fun rememberWebViewDelegate(onUrlClicked: (String) -> Unit,onLoadingFinished:()->Unit): WKNavigationDelegateProtocol {
     return object : NSObject(), WKNavigationDelegateProtocol {
         override fun webView(
             webView: WKWebView,
             decidePolicyForNavigationAction: WKNavigationAction,
             decisionHandler: (WKNavigationActionPolicy) -> Unit
         ) {
+            onLoadingFinished()
             val navigationType = decidePolicyForNavigationAction.navigationType
             val request = decidePolicyForNavigationAction.request
 

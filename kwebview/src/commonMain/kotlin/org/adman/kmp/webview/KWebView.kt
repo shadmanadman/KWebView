@@ -44,8 +44,7 @@ import org.jetbrains.compose.ui.tooling.preview.Preview
  *
  */
 @Composable
-@Preview
-fun KmpWebViewScreen(
+fun KWebView(
     modifier: Modifier? = null,
     url: String? = null,
     htmlContent: String? = null,
