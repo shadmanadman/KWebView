@@ -5,7 +5,6 @@
 xcuserdata
 !src/**/build/
 local.properties
-gradle.properties
 .idea
 .DS_Store
 captures
@@ -17,4 +16,4 @@ captures
 !*.xcodeproj/project.xcworkspace/
 !*.xcworkspace/contents.xcworkspacedata
 **/xcshareddata/WorkspaceSettings.xcsettings
-java_pid4226.hpro
+java_pid4226.hprof
