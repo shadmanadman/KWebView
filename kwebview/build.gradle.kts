@@ -1,9 +1,5 @@
-import com.vanniktech.maven.publish.SonatypeHost
-import com.vanniktech.maven.publish.SonatypeHost.Companion.CENTRAL_PORTAL
 import org.jetbrains.compose.desktop.application.dsl.TargetFormat
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
-import java.io.FileInputStream
-import java.util.Properties
 
 plugins {
     alias(libs.plugins.kotlinMultiplatform)
