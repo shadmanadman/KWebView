@@ -1,4 +1,5 @@
 import com.vanniktech.maven.publish.SonatypeHost
+import com.vanniktech.maven.publish.SonatypeHost.Companion.CENTRAL_PORTAL
 import org.jetbrains.compose.desktop.application.dsl.TargetFormat
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 import java.io.FileInputStream
@@ -61,12 +62,12 @@ kotlin {
                 "osx-aarch_64" -> "mac-aarch64"
                 else -> throw IllegalStateException("Unknown OS: ${osdetector.classifier}")
             }
-            implementation("org.openjfx:javafx-base:19:${fxSuffix}")
-            implementation("org.openjfx:javafx-graphics:19:${fxSuffix}")
-            implementation("org.openjfx:javafx-controls:19:${fxSuffix}")
-            implementation("org.openjfx:javafx-swing:19:${fxSuffix}")
-            implementation("org.openjfx:javafx-web:19:${fxSuffix}")
-            implementation("org.openjfx:javafx-media:19:${fxSuffix}")
+            implementation("org.openjfx:javafx-base:24.0.1:${fxSuffix}")
+            implementation("org.openjfx:javafx-graphics:24.0.1:${fxSuffix}")
+            implementation("org.openjfx:javafx-controls:24.0.1:${fxSuffix}")
+            implementation("org.openjfx:javafx-swing:24.0.1:${fxSuffix}")
+            implementation("org.openjfx:javafx-web:24.0.1:${fxSuffix}")
+            implementation("org.openjfx:javafx-media:24.0.1:${fxSuffix}")
             implementation(libs.kotlinx.coroutines.swing)
         }
     }
@@ -112,20 +113,24 @@ dependencies {
 }
 
 mavenPublishing {
+    signAllPublications()
+
+    publishToMavenCentral()
+    val tag: String? = System.getenv("GITHUB_REF")?.split("/")?.lastOrNull()
+
     coordinates(
         groupId = libs.versions.groupId.get(),
         artifactId = libs.versions.artifactId.get(),
-        version = libs.versions.libVersion.get()
+        version = tag ?: "1.42.0-SNAPSHOT"
     )
-
     pom {
         name = "KMP WebView"
-        description = "A simple kmp webview to show HTML content or URL"
+        description = "A lightweight and simple Kotlin Multiplatform webview to show HTML content or URL"
         url = "https://github.com/shadmanadman/Kmp-WebView"
         licenses {
             license {
-                name = "Apache License, Version 2.0"
-                url = "https://www.apache.org/licenses/LICENSE-2.0.txt"
+                name = "WTFPL"
+                url = "https://www.wtfpl.net/"
             }
         }
         developers {
@@ -136,28 +141,24 @@ mavenPublishing {
             }
         }
         scm {
-            connection = "scm:git:https://github.com/shadmanadman/Kmp-WebView"
-            developerConnection = "scm:git:git@github.com:shadmanadman/Kmp-WebView.git"
-            url = "https://github.com/shadmanadman/Kmp-WebView"
+            connection = "scm:git:https://github.com/shadmanadman/KWebView"
+            developerConnection = "scm:git:git@github.com:shadmanadman/KWebView.git"
+            url = "https://github.com/shadmanadman/KWebView"
         }
     }
-
-
-    publishToMavenCentral(SonatypeHost.CENTRAL_PORTAL)
-    signAllPublications()
 }
 
-
-val keystorePropertiesFile = rootProject.file("local.properties")
-val keystoreProperties = Properties()
-keystoreProperties.load(FileInputStream(keystorePropertiesFile))
 
 signing {
-//    useInMemoryPgpKeys(
-//        keystoreProperties["signing.keyId"].toString(),
-//        File(keystoreProperties["signing.secretKeyFile"].toString()).readText(),
-//        keystoreProperties["signing.password"].toString()
-//    )
+    val keyId = System.getenv("ORG_GRADLE_PROJECT_signingInMemoryKeyId")
+    val key = System.getenv("ORG_GRADLE_PROJECT_signingInMemoryKey")
+    val keyPassword = System.getenv("ORG_GRADLE_PROJECT_signingInMemoryKeyPassword")
+    useInMemoryPgpKeys(
+        keyId,
+        key,
+        keyPassword
+    )
 }
+
 
 
