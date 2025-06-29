@@ -4,21 +4,18 @@
 
 ![](poster.jpg)
 
-### What's new in 1.9.4:
-- Option to enable javascript content
 
 <!-- GETTING STARTED -->
 ## Getting Started
 ### Adding dependencies
 - Add it in your `commonMain.dependencies`
   ```
-  implementation("io.github.shadmanadman:kmp-webview:1.9.4")
+  implementation("io.github.shadmanadman:kwebview:1.12.15")
   ```
 
 ### Usage  
 ```
-@Composable
-fun KmpWebViewScreen(
+KWebView(
     modifier: Modifier? = null,
     url: String? = null,
     htmlContent: String? = null,
@@ -34,9 +31,19 @@ fun KmpWebViewScreen(
    - *Note*: If you don't implement this, all links will be opened in your current web view.
 - `enableJavaScript`: Enable javascript content
 
-<h1 align="center">Any contribution is very satisfying. </h1>
-<h2 align="center">Make it easier for everyone</h2>
-
+#### Rearranging html content
+If you are loading html content you can change some font options and rearrange the content to be shown better
+on smaller devices:
+```
+KWebView(
+    htmlContent: content.formatHtmlContent(
+    fontSize: Int = 12,
+    textAlign: TextAlign = TextAlign.JUSTIFY,
+    fontColor: String = "#000000"
+    ),
+    //... other params 
+)
+```
 ### Licence       
 ```
                DO WHAT THE FUCK YOU WANT TO PUBLIC LICENSE 
