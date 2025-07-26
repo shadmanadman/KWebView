@@ -10,7 +10,7 @@
 ### Adding dependencies
 - Add it in your `commonMain.dependencies`
   ```
-  implementation("io.github.shadmanadman:kwebview:1.12.15")
+  implementation("io.github.shadmanadman:kwebview:1.12.16")
   ```
 
 ### Usage  
