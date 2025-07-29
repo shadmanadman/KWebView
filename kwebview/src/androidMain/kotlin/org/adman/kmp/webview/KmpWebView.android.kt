@@ -4,6 +4,7 @@ import android.graphics.Bitmap
 import android.graphics.Color
 import android.view.View
 import android.view.ViewGroup
+import android.webkit.CookieManager
 import android.webkit.WebResourceRequest
 import android.webkit.WebSettings
 import android.webkit.WebView
@@ -26,6 +27,8 @@ internal actual fun KmpWebView(
     url: Url?,
     htmlContent: HtmlContent?,
     enableJavaScript: Boolean,
+    allowCookies: Boolean,
+    enableDomStorage: Boolean,
     isLoading: (isLoading: Boolean) -> Unit,
     onUrlClicked: ((url: String) -> Unit)?
 ) {
@@ -54,6 +57,12 @@ internal actual fun KmpWebView(
                         layoutAlgorithm = WebSettings.LayoutAlgorithm.NORMAL
                         javaScriptEnabled = enableJavaScript
                     }
+
+                    // Enable cookies / Enable dom storage
+                    val cookieManager = CookieManager.getInstance()
+                    settings.domStorageEnabled = enableDomStorage
+                    cookieManager.setAcceptCookie(allowCookies)
+
                     webViewClient =
                         object : WebViewClient() {
 

@@ -30,6 +30,8 @@ internal actual fun KmpWebView(
     url: Url?,
     htmlContent: HtmlContent?,
     enableJavaScript: Boolean,
+    allowCookies: Boolean,
+    enableDomStorage: Boolean,
     isLoading: (isLoading: Boolean) -> Unit,
     onUrlClicked: ((url: String) -> Unit)?
 ) {

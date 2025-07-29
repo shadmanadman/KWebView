@@ -10,6 +10,8 @@ import javafx.application.Platform
 import javafx.embed.swing.JFXPanel
 import javafx.scene.Scene
 import javafx.scene.web.WebView
+import java.net.CookieManager
+import java.net.CookiePolicy
 import javax.swing.JPanel
 
 fun initJavaFX() {
@@ -23,6 +25,8 @@ internal actual fun KmpWebView(
     url: Url?,
     htmlContent: HtmlContent?,
     enableJavaScript: Boolean,
+    allowCookies: Boolean,
+    enableDomStorage: Boolean,
     isLoading: (isLoading: Boolean) -> Unit,
     onUrlClicked: ((url: String) -> Unit)?
 ) {
@@ -35,6 +39,7 @@ internal actual fun KmpWebView(
                     url,
                     htmlContent,
                     enableJavaScript,
+                    allowCookies,
                     isLoading,
                     onUrlClicked
                 )
@@ -51,6 +56,7 @@ private fun JFXPanel.buildWebView(
     url: String?,
     htmlContent: HtmlContent?,
     enableJavaScript: Boolean,
+    allowCookies: Boolean,
     isLoading: (isLoading: Boolean) -> Unit,
     onUrlClicked: ((url: String) -> Unit)?
 ) {
@@ -62,6 +68,14 @@ private fun JFXPanel.buildWebView(
         webEngine.isJavaScriptEnabled = enableJavaScript
         webEngine.userAgent =
             "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.3"
+
+        // Allow cookies
+        val cookieManager = CookieManager()
+        when (allowCookies) {
+            true -> cookieManager.setCookiePolicy(CookiePolicy.ACCEPT_ALL)
+
+            false -> cookieManager.setCookiePolicy(CookiePolicy.ACCEPT_NONE)
+        }
 
         scene = Scene(webView)
         htmlContent.let {

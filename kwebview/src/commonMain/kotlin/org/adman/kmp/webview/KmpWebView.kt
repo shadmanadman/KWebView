@@ -12,6 +12,8 @@ internal expect fun KmpWebView(
     url: Url?,
     htmlContent: HtmlContent?,
     enableJavaScript: Boolean = false,
+    allowCookies: Boolean = false,
+    enableDomStorage: Boolean = false,
     isLoading: (isLoading: Boolean) -> Unit,
     onUrlClicked: ((url: String) -> Unit)?
 )
