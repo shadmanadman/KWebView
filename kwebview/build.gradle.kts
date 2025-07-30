@@ -37,6 +37,7 @@ kotlin {
         val desktopMain by getting
 
         androidMain.dependencies {
+            implementation(libs.androidx.startup)
         }
         commonMain.dependencies {
             implementation(compose.runtime)
@@ -117,12 +118,12 @@ mavenPublishing {
     coordinates(
         groupId = libs.versions.groupId.get(),
         artifactId = libs.versions.artifactId.get(),
-        version = tag ?: "1.42.0-SNAPSHOT"
+        version = tag ?: "1.43.0-SNAPSHOT"
     )
     pom {
-        name = "KMP WebView"
-        description = "A lightweight and simple Kotlin Multiplatform webview to show HTML content or URL"
-        url = "https://github.com/shadmanadman/Kmp-WebView"
+        name = "KWebView"
+        description = "A Lightweight and simple webview for Kotlin Multiplatform targeting Android, iOS and Desktop"
+        url = "https://github.com/shadmanadman/KWebView"
         licenses {
             license {
                 name = "WTFPL"

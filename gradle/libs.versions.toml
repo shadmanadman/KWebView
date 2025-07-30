@@ -6,12 +6,14 @@ android-targetSdk = "36"
 compose-multiplatform = "1.8.2"
 kotlinx-coroutines = "1.10.2"
 kotlin = "2.2.0"
+startup = "1.2.0"
 groupId = "io.github.shadmanadman"
 artifactId = "kwebview"
 libVersion = "1.12.8"
 
 [libraries]
 kotlinx-coroutines-swing = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-swing", version.ref = "kotlinx-coroutines" }
+androidx-startup = { module = "androidx.startup:startup-runtime", version.ref = "startup" }
 
 [plugins]
 androidLibrary = { id = "com.android.library", version.ref = "agp" }
