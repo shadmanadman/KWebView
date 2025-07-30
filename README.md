@@ -10,7 +10,7 @@
 ### Adding dependencies
 - Add it in your `commonMain.dependencies`
   ```
-  implementation("io.github.shadmanadman:kwebview:1.12.16")
+  implementation("io.github.shadmanadman:kwebview:1.31.0")
   ```
 
 ### Usage  
@@ -20,6 +20,8 @@ KWebView(
     url: String? = null,
     htmlContent: String? = null,
     enableJavaScript: Boolean = false,
+    allowCookies: Boolean = false,
+    enableDomStorageForAndroid: Boolean=false,
     isLoading: ((isLoading: Boolean) -> Unit)? = null,
     onUrlClicked: ((url: String) -> Unit)? = null
 )
@@ -30,6 +32,8 @@ KWebView(
      current web view.
    - *Note*: If you don't implement this, all links will be opened in your current web view.
 - `enableJavaScript`: Enable javascript content
+- `allowCookies`: allow the webview to use cookies
+- `enableDomStorageForAndroid`: enable DOM storage for Android
 
 #### Rearranging html content
 If you are loading html content you can change some font options and rearrange the content to be shown better
