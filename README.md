@@ -11,7 +11,7 @@
 ### Adding dependencies
 - Add it in your `commonMain.dependencies`
   ```
-  implementation("io.github.shadmanadman:kwebview:1.31.4")
+  implementation("io.github.shadmanadman:kwebview:1.31.5")
   ```
 
 ### Usage  
