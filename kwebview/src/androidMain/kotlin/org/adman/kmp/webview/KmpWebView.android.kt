@@ -99,20 +99,17 @@ internal actual fun KmpWebView(
                 }
             },
             update = { webView ->
-                if (url == null)
-                    htmlContent?.let {
-                        webView.loadDataWithBaseURL(
-                            "",
-                            /* data = */ it, /* mimeType = */
-                            "text/html", /* encoding = */
-                            "UTF-8",
-                            ""
-                        )
-                    }
-                else
-                    url.let {
-                        webView.loadUrl(it)
-                    }
+                when{
+                    htmlContent!=null->webView.loadDataWithBaseURL(
+                        "",
+                        /* data = */ htmlContent, /* mimeType = */
+                        "text/html", /* encoding = */
+                        "UTF-8",
+                        ""
+                    )
+                    url!=null->webView.loadUrl(url)
+                    else -> println("⚠️ No URL or HTML content provided")
+                }
             })
     }
 }

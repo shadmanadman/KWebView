@@ -78,11 +78,10 @@ private fun JFXPanel.buildWebView(
         }
 
         scene = Scene(webView)
-        htmlContent.let {
-            webEngine.loadContent(it)
-        }
-        url.let {
-            webEngine.load(it)
+        when{
+            htmlContent!=null->webEngine.loadContent(htmlContent)
+            url!=null->webEngine.load(url)
+            else -> println("⚠️ No URL or HTML content provided")
         }
 
         webEngine.loadWorker.stateProperty().addListener { _, _, newState ->
