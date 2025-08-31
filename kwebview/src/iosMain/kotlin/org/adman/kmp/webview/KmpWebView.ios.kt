@@ -11,8 +11,14 @@ import androidx.compose.ui.viewinterop.UIKitView
 import kotlinx.cinterop.ExperimentalForeignApi
 import kotlinx.cinterop.readValue
 import platform.CoreGraphics.CGRectZero
+import platform.Foundation.NSHTTPCookie
+import platform.Foundation.NSHTTPCookieDomain
+import platform.Foundation.NSHTTPCookieName
+import platform.Foundation.NSHTTPCookiePath
 import platform.Foundation.NSURL
 import platform.Foundation.NSURLRequest
+import platform.Foundation.NSHTTPCookieStorage
+import platform.Foundation.NSHTTPCookieValue
 import platform.UIKit.NSLayoutConstraint
 import platform.UIKit.UIView
 import platform.WebKit.WKNavigationAction
@@ -31,6 +37,7 @@ internal actual fun KmpWebView(
     htmlContent: HtmlContent?,
     enableJavaScript: Boolean,
     allowCookies: Boolean,
+    injectCookies: List<Cookies>,
     enableDomStorage: Boolean,
     isLoading: (isLoading: Boolean) -> Unit,
     onUrlClicked: ((url: String) -> Unit)?
@@ -52,6 +59,22 @@ internal actual fun KmpWebView(
         webView.navigationDelegate = navigationDelegate
     }
 
+    // Inject cookies
+    injectCookies.forEach { injectCookie->
+        val cookieProps: Map<Any?, *> = mapOf(
+            NSHTTPCookieName to injectCookie.name,
+            NSHTTPCookieValue to injectCookie.value,
+            NSHTTPCookieDomain to injectCookie.domain,
+            NSHTTPCookiePath to injectCookie.path
+        )
+        val cookie = NSHTTPCookie.cookieWithProperties(cookieProps)
+        if (cookie != null) {
+            webView.configuration.websiteDataStore.httpCookieStore.setCookie(cookie) {
+                println("Cookie set: ${cookie.name} = ${cookie.value}")
+            }
+        }
+    }
+
     UIKitView(
         factory = {
             val container = UIView()
@@ -71,7 +94,7 @@ internal actual fun KmpWebView(
             when {
                 htmlContent != null -> webView.loadHTMLString(htmlContent, baseURL = null)
                 url != null -> webView.loadRequest(NSURLRequest(NSURL(string = url)))
-                else -> println("⚠️ No URL or HTML content provided")
+                else -> println("No URL or HTML content provided")
             }
 
             container

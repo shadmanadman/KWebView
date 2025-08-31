@@ -2,9 +2,11 @@ package org.adman.kmp.webview
 
 import android.graphics.Bitmap
 import android.graphics.Color
+import android.util.Log
 import android.view.View
 import android.view.ViewGroup
 import android.webkit.CookieManager
+import android.webkit.ValueCallback
 import android.webkit.WebResourceRequest
 import android.webkit.WebSettings
 import android.webkit.WebView
@@ -14,10 +16,6 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.viewinterop.AndroidView
 
@@ -28,6 +26,7 @@ internal actual fun KmpWebView(
     htmlContent: HtmlContent?,
     enableJavaScript: Boolean,
     allowCookies: Boolean,
+    injectCookies: List<Cookies>,
     enableDomStorage: Boolean,
     isLoading: (isLoading: Boolean) -> Unit,
     onUrlClicked: ((url: String) -> Unit)?
@@ -56,12 +55,17 @@ internal actual fun KmpWebView(
                         useWideViewPort = true
                         layoutAlgorithm = WebSettings.LayoutAlgorithm.NORMAL
                         javaScriptEnabled = enableJavaScript
+                        domStorageEnabled = enableDomStorage
                     }
 
-                    // Enable cookies / Enable dom storage
+                    // Enable/Inject cookies
                     val cookieManager = CookieManager.getInstance()
-                    settings.domStorageEnabled = enableDomStorage
                     cookieManager.setAcceptCookie(allowCookies)
+                    // TODO needs optimization
+                    injectCookies.injectCookieStrings{ injectCookie->
+                        cookieManager.setCookie(url?:"",injectCookie)
+                    }
+                    cookieManager.flush()
 
                     webViewClient =
                         object : WebViewClient() {
@@ -77,6 +81,11 @@ internal actual fun KmpWebView(
                             override fun onPageFinished(view: WebView?, url: String?) {
                                 view?.scrollTo(view.contentHeight, 0)
                                 isLoading(false)
+
+                                view?.evaluateJavascript("document.cookie"
+                                ) { cookieString ->
+                                    Log.d("WebViewCookieTest", "Cookies retrieved: $cookieString")
+                                }
                             }
 
                             override fun shouldOverrideUrlLoading(
@@ -99,15 +108,16 @@ internal actual fun KmpWebView(
                 }
             },
             update = { webView ->
-                when{
-                    htmlContent!=null->webView.loadDataWithBaseURL(
+                when {
+                    htmlContent != null -> webView.loadDataWithBaseURL(
                         "",
                         /* data = */ htmlContent, /* mimeType = */
                         "text/html", /* encoding = */
                         "UTF-8",
                         ""
                     )
-                    url!=null->webView.loadUrl(url)
+
+                    url != null -> webView.loadUrl(url)
                     else -> println("⚠️ No URL or HTML content provided")
                 }
             })

@@ -12,7 +12,9 @@ import javafx.scene.Scene
 import javafx.scene.web.WebView
 import java.net.CookieManager
 import java.net.CookiePolicy
+import java.net.URI
 import javax.swing.JPanel
+
 
 fun initJavaFX() {
     System.setProperty("prism.order", "sw")
@@ -26,6 +28,7 @@ internal actual fun KmpWebView(
     htmlContent: HtmlContent?,
     enableJavaScript: Boolean,
     allowCookies: Boolean,
+    injectCookies: List<Cookies>,
     enableDomStorage: Boolean,
     isLoading: (isLoading: Boolean) -> Unit,
     onUrlClicked: ((url: String) -> Unit)?
@@ -40,6 +43,7 @@ internal actual fun KmpWebView(
                     htmlContent,
                     enableJavaScript,
                     allowCookies,
+                    injectCookies,
                     isLoading,
                     onUrlClicked
                 )
@@ -57,6 +61,7 @@ private fun JFXPanel.buildWebView(
     htmlContent: HtmlContent?,
     enableJavaScript: Boolean,
     allowCookies: Boolean,
+    injectCookies: List<Cookies>,
     isLoading: (isLoading: Boolean) -> Unit,
     onUrlClicked: ((url: String) -> Unit)?
 ) {
@@ -72,7 +77,16 @@ private fun JFXPanel.buildWebView(
         // Allow cookies
         val cookieManager = CookieManager()
         when (allowCookies) {
-            true -> cookieManager.setCookiePolicy(CookiePolicy.ACCEPT_ALL)
+            true -> {
+                cookieManager.setCookiePolicy(CookiePolicy.ACCEPT_ALL)
+                // TODO needs optimization
+                injectCookies.injectCookieStrings { injectCookie->
+                    val responseHeaders: MutableMap<String?, MutableList<String?>?> =
+                        HashMap()
+                    responseHeaders.put("Set-Cookie", mutableListOf(injectCookie))
+                    cookieManager.put(URI(url?:""),responseHeaders)
+                }
+            }
 
             false -> cookieManager.setCookiePolicy(CookiePolicy.ACCEPT_NONE)
         }
