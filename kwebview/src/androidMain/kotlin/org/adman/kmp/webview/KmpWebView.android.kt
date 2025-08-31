@@ -2,14 +2,17 @@ package org.adman.kmp.webview
 
 import android.graphics.Bitmap
 import android.graphics.Color
+import android.os.Build
 import android.util.Log
 import android.view.View
 import android.view.ViewGroup
 import android.webkit.CookieManager
+import android.webkit.CookieSyncManager
 import android.webkit.ValueCallback
 import android.webkit.WebResourceRequest
 import android.webkit.WebSettings
 import android.webkit.WebView
+import android.webkit.WebView.setWebContentsDebuggingEnabled
 import android.webkit.WebViewClient
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
@@ -61,11 +64,18 @@ internal actual fun KmpWebView(
                     // Enable/Inject cookies
                     val cookieManager = CookieManager.getInstance()
                     cookieManager.setAcceptCookie(allowCookies)
+                    cookieManager.setAcceptThirdPartyCookies(this,allowCookies)
                     // TODO needs optimization
                     injectCookies.injectCookieStrings{ injectCookie->
                         cookieManager.setCookie(url?:"",injectCookie)
                     }
-                    cookieManager.flush()
+                    if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
+                        CookieSyncManager.getInstance().sync()
+                    } else {
+                        cookieManager.flush()
+                    }
+
+                    setWebContentsDebuggingEnabled(true)
 
                     webViewClient =
                         object : WebViewClient() {

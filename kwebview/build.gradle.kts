@@ -118,7 +118,7 @@ mavenPublishing {
     coordinates(
         groupId = libs.versions.groupId.get(),
         artifactId = libs.versions.artifactId.get(),
-        version = tag ?: "1.55.0-SNAPSHOT"
+        version = tag ?: "1.59.0-SNAPSHOT"
     )
     pom {
         name = "KWebView"

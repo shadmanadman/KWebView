@@ -50,6 +50,7 @@ fun KWebView(
     htmlContent: String? = null,
     enableJavaScript: Boolean = false,
     allowCookies: Boolean = false,
+    injectCookies: List<Cookies> = emptyList(),
     enableDomStorageForAndroid: Boolean=false,
     isLoading: ((isLoading: Boolean) -> Unit)? = null,
     onUrlClicked: ((url: String) -> Unit)? = null
@@ -60,6 +61,7 @@ fun KWebView(
         htmlContent = htmlContent,
         enableJavaScript = enableJavaScript,
         allowCookies = allowCookies,
+        injectCookies = injectCookies,
         enableDomStorage = enableDomStorageForAndroid,
         isLoading = isLoading?:{},
         onUrlClicked = onUrlClicked ?: {})
