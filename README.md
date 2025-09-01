@@ -36,6 +36,25 @@ KWebView(
 - `allowCookies`: allow the webview to use cookies
 - `enableDomStorageForAndroid`: enable DOM storage for Android
 
+#### Inject cookies
+Create a list of `Cookies` and pass it to the KWebView:
+```
+val mCookies = listOf(
+    Cookies(
+        val name: String,
+        val value: String,
+        val domain: String,
+        val path: String = "/",
+        val expires: String? = null,
+        val maxAge: Long? = null,
+        val secure: Boolean = false,
+        val httpOnly: Boolean = false,
+        val sameSite: String? = null
+    )
+)
+KWebView(allowCookies= true, injectCookies = mCookies, url = example.com, ...)
+```
+
 #### Rearranging html content
 If you are loading html content you can change some font options and rearrange the content to be shown better
 on smaller devices:
