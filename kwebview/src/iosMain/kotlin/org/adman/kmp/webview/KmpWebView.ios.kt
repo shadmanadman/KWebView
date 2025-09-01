@@ -13,8 +13,11 @@ import kotlinx.cinterop.readValue
 import platform.CoreGraphics.CGRectZero
 import platform.Foundation.NSHTTPCookie
 import platform.Foundation.NSHTTPCookieDomain
+import platform.Foundation.NSHTTPCookieExpires
 import platform.Foundation.NSHTTPCookieName
 import platform.Foundation.NSHTTPCookiePath
+import platform.Foundation.NSHTTPCookieSameSitePolicy
+import platform.Foundation.NSHTTPCookieSecure
 import platform.Foundation.NSURL
 import platform.Foundation.NSURLRequest
 import platform.Foundation.NSHTTPCookieStorage
@@ -65,7 +68,11 @@ internal actual fun KmpWebView(
             NSHTTPCookieName to injectCookie.name,
             NSHTTPCookieValue to injectCookie.value,
             NSHTTPCookieDomain to injectCookie.domain,
-            NSHTTPCookiePath to injectCookie.path
+            NSHTTPCookiePath to injectCookie.path,
+            NSHTTPCookieExpires to injectCookie.expires,
+            NSHTTPCookieSameSitePolicy to injectCookie.sameSite,
+            NSHTTPCookieSecure to injectCookie.secure,
+            "HttpOnly" to injectCookie.httpOnly
         )
         val cookie = NSHTTPCookie.cookieWithProperties(cookieProps)
         if (cookie != null) {
