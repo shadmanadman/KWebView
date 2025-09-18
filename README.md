@@ -37,7 +37,7 @@ KWebView(
 - `enableDomStorageForAndroid`: enable DOM storage for Android
 
 #### Inject cookies
-Create a list of `Cookies` and pass it to the KWebView:
+Create a list of `Cookies` and pass it to the `KWebView`:
 ```
 val mCookies = listOf(
     Cookies(

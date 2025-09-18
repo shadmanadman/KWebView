@@ -32,7 +32,7 @@ kotlin {
     }
 
     jvm("desktop")
-
+    mingwX64("mingw")
     sourceSets {
         val desktopMain by getting
 
